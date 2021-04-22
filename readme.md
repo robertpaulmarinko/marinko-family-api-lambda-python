@@ -30,3 +30,14 @@ Boto3
 
 https://boto3.amazonaws.com/v1/documentation/api/latest/index.html
 
+
+## Deploy
+
+To deploy to AWS, run 
+
+`./deploy.ps1`
+
+This is a PowerShell scripts that zips up the source files and uploads to the lambda
+
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/compress-archive?view=powershell-7.1
+
