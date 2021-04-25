@@ -41,3 +41,16 @@ This is a PowerShell scripts that zips up the source files and uploads to the la
 
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/compress-archive?view=powershell-7.1
 
+## Testing
+
+Run a test file like  this
+
+`py test-get-video-of-the-day.py`
+
+
+## Issues
+
+### CORS
+
+Only only website can be returned in the Access-Control-Allow-Origin header.  So had to write a function to check the incoming origin, and if it was valid, return it.
+
