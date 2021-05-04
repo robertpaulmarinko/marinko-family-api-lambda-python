@@ -1,6 +1,7 @@
 import boto3
 import pictures_of_the_day
 import video_of_the_day
+import recipe
 import json
 
 print('Loading function')
@@ -32,6 +33,9 @@ def lambda_handler(event, context):
         return respond(None, origin, fileString)
     elif path == "/videoOfTheDay/data":
         fileString = video_of_the_day.get_video_of_the_day_data()
+        return respond(None, origin, fileString)
+    elif path == "/recipes":
+        fileString = recipe.get_recipes()
         return respond(None, origin, fileString)
 
 # The Access-Control-Allow-Origin header can only return one values.
