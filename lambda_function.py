@@ -3,6 +3,7 @@ import pictures_of_the_day
 import video_of_the_day
 import recipe
 import json
+import auth
 
 print('Loading function')
 s3 = boto3.resource('s3')
@@ -22,6 +23,7 @@ def respond(err, origin, res=None):
 
 
 def lambda_handler(event, context):
+    # Format of event: https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html
     print("Received event: " + json.dumps(event, indent=2))
     print(event)
 
@@ -36,6 +38,9 @@ def lambda_handler(event, context):
         return respond(None, origin, fileString)
     elif path == "/recipes":
         fileString = recipe.get_recipes()
+        return respond(None, origin, fileString)
+    elif path == "/login":
+        fileString = auth.attempt_login(event.get("body"))
         return respond(None, origin, fileString)
 
 # The Access-Control-Allow-Origin header can only return one values.
