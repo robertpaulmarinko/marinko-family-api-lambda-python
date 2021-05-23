@@ -54,3 +54,9 @@ Run a test file like  this
 
 Only only website can be returned in the Access-Control-Allow-Origin header.  So had to write a function to check the incoming origin, and if it was valid, return it.
 
+## Password storage
+Created a KMS key called `marinko_family_website_password_key`
+
+Created a Secret called `marinko_family_website_password`
+
+Updated `marinko-family-web-site` role to allow decoding using KMS key and reading of secret.
