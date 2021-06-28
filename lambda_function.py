@@ -62,6 +62,11 @@ def get_origin(event):
     
 def is_request_authorized(event):
     path_does_not_require_auth = [ "/picturesOfTheDay/data", "/videoOfTheDay/data", "/login"  ]
+
+    # Always allow OPTIONS CORS requests
+    if event.get("httpMethod") == "OPTIONS":
+        return True
+
     path = event.get("path")
     if path in path_does_not_require_auth:
         # do auth token required
@@ -99,7 +104,7 @@ def respond_unauthorized(origin):
 def response_headers(origin):
     return {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Headers': 'Content-Type,x-auth-token',
             'Access-Control-Allow-Origin': origin,
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'            
         }
