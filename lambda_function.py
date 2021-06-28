@@ -9,25 +9,14 @@ print('Loading function')
 s3 = boto3.resource('s3')
 
 
-def respond(err, origin, res=None):
-    return {
-        'statusCode': '400' if err else '200',
-        'body': err.message if err else res, 
-        'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Allow-Origin': origin,
-            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'            
-        },
-    }
-
-
 def lambda_handler(event, context):
     # Format of event: https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html
     print("Received event: " + json.dumps(event, indent=2))
     print(event)
 
     origin = get_origin(event)
+    if is_request_authorized(event) == False:
+        return respond_unauthorized(origin)
 
     path = event.get("path")
     if path == "/picturesOfTheDay/data":
@@ -71,3 +60,47 @@ def get_origin(event):
         return ''
 
     
+def is_request_authorized(event):
+    path_does_not_require_auth = [ "/picturesOfTheDay/data", "/videoOfTheDay/data", "/login"  ]
+    path = event.get("path")
+    if path in path_does_not_require_auth:
+        # do auth token required
+        print("no auth token is required")
+        return True
+    else:
+        print("auth token is required")
+        user_auth_token = get_auth_token_from_header(event)
+        print("passed auth token: " + user_auth_token)
+        return auth.is_token_valid(user_auth_token)
+
+def get_auth_token_from_header(event)        :
+    auth_token = ""
+    headers = event.get("headers")
+    if headers != None:
+        auth_token = headers.get("x-auth-token")
+        if auth_token != None:
+            return auth_token
+
+    return ""
+
+def respond(err, origin, res=None):
+    return {
+        'statusCode': '400' if err else '200',
+        'body': err.message if err else res, 
+        'headers': response_headers(origin)
+    }
+
+def respond_unauthorized(origin):
+    return {
+        'statusCode': '401',
+        'headers': response_headers(origin)
+    }
+
+def response_headers(origin):
+    return {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Origin': origin,
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'            
+        }
+

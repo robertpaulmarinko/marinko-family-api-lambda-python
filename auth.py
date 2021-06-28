@@ -3,6 +3,12 @@ import boto3
 import base64
 from botocore.exceptions import ClientError
 import uuid
+import file_storage
+
+s3 = boto3.resource('s3')
+
+# name of file that contains valid auth token
+AUTH_FILE = 'auth-token.txt'
 
 class LoginResponse:
     success = False
@@ -70,5 +76,12 @@ def get_password():
 
 def generate_and_save_token():
     token =  uuid.uuid4()
-    # todo save token
+    
+    s3.Object(file_storage.FAMILY_WEB_SITE_BUCKET, AUTH_FILE).put(Body=token.hex)
+
     return token.hex;
+
+
+def is_token_valid(check_token)    :
+    valid_token = file_storage.get_file(file_storage.FAMILY_WEB_SITE_BUCKET, AUTH_FILE)
+    return valid_token == check_token
