@@ -2,10 +2,12 @@ import lambda_function
 import json
 import recipe
 
+# WARNING - the save_recipe function will update the JSON file in S3
+
 recipe.save_recipe('''
         {
-            "id": "f9eb9e35-e34b-47c3-afe0-8fca2c36de91",
-            "name": "Hamburgers on the grill - change 1",
+            "id": "2d31df47-c56f-44d1-b43d-91780862035f",
+            "name": "Hot dogs change",
             "source": "None",
             "instructions": null,
             "imageStorageKey": "f9eb9e35-e34b-47c3-afe0-8fca2c36de91.jpg"

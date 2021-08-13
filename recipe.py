@@ -23,7 +23,7 @@ RECIPE_JSON_KEY = 'menu/recipe-box-test.json'
 
 def get_recipes():
     fileString = file_storage.get_file(file_storage.FAMILY_WEB_SITE_BUCKET, RECIPE_JSON_KEY)
-    print("Recipe file: " + fileString)
+    # print("Recipe file: " + fileString)
 
     return fileString
 
@@ -35,19 +35,21 @@ def save_recipe(recipeRequest):
 
     recipeJson = json.loads(recipeRequest)
     id = recipeJson.get("id");
+    print("id:" + id)
     if id == "":
         # add a new recipe to end of the array
+        print("add as new recipe")
         id = uuid.uuid4().hex
         recipeJson["id"] = id
         allRecipes["recipes"].append(recipeJson)
     else:
         # look for existing recipe and replace in array
-        for index, recipe in enumerate(allRecipes["recipes"], start=1):
-            print(recipe)
+        for index, recipe in enumerate(allRecipes["recipes"], start=0):
             if recipe["id"] == id:
-                allRecipes[index] = recipeJson
+                print("Updating recipe at index: ", index)
+                allRecipes["recipes"][index] = recipeJson
 
     allRecipesJson = json.dumps(allRecipes)
-    file_storage.put_file(file_storage.FAMILY_WEB_SITE_BUCKET, RECIPE_JSON_KEY, allRecipesJson)
+    # file_storage.put_file(file_storage.FAMILY_WEB_SITE_BUCKET, RECIPE_JSON_KEY, allRecipesJson)
     print(allRecipesJson)
     return allRecipesJson
