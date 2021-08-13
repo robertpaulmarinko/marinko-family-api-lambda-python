@@ -3,7 +3,8 @@ import json
 import recipe
 
 # WARNING - the save_recipe function will update the JSON file in S3
-
+# Code is commented out, only run if you really want to update the S3 data
+"""
 recipe.save_recipe('''
         {
             "id": "2d31df47-c56f-44d1-b43d-91780862035f",
@@ -23,6 +24,7 @@ recipe.save_recipe('''
             "imageStorageKey": ""
         }
 ''')
+"""
 
 print("starting...")
 lambda_function.lambda_handler(json.loads('{ "path": "/recipes", "multiValueHeaders": { "origin": ["https://beta.marinkofamily.com"] } }'), {})
