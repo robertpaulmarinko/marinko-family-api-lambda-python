@@ -3,7 +3,7 @@
 This it the API written in Python, running in an AWS Lambda, and exposed to the web using AWS API Gateway.
 
 
-
+'
 ## API Gateway Setup
 
 Create the `marinko-family-web-site-python` lambda and during the creation process requested that an API Gateway be created.
@@ -60,3 +60,15 @@ Created a KMS key called `marinko_family_website_password_key`
 Created a Secret called `marinko_family_website_password`
 
 Updated `marinko-family-web-site` role to allow decoding using KMS key and reading of secret.
+
+## Reading a JSON array and editing the content
+
+Reading the array
+
+https://stackoverflow.com/questions/47060035/python-parse-json-array
+
+https://pythonexamples.org/python-json-to-list/
+
+looping through an array while also getting the index
+
+https://treyhunner.com/2016/04/how-to-loop-with-indexes-in-python/

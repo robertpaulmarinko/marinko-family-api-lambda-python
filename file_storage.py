@@ -18,3 +18,6 @@ def get_file(bucket, file_key):
     fileString = fileBytes.decode('UTF-8')
 
     return fileString
+
+def put_file(bucket, file_key, file):
+    s3.Object(bucket, file_key).put(Body=file)

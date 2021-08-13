@@ -19,7 +19,6 @@ class LoginResponse:
 # If it is not, or the password could not be loaded, returns success = false
 # request is a JSON string with one field called "password"
 def attempt_login(request):
-    print("attemp_login: " + request)
     requestJson = json.loads(request);
     response = LoginResponse()
     
