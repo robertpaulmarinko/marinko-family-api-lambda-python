@@ -27,5 +27,8 @@ recipe.save_recipe('''
 """
 
 print("starting...")
-lambda_function.lambda_handler(json.loads('{ "path": "/recipes", "multiValueHeaders": { "origin": ["https://beta.marinkofamily.com"] } }'), {})
+# lambda_function.lambda_handler(json.loads('{ "path": "/recipes", "multiValueHeaders": { "origin": ["https://beta.marinkofamily.com"] } }'), {})
+
+recipes = recipe.get_recipes()
+print(recipes)
 

@@ -20,6 +20,7 @@ Sample of the recipe-box.json data structure
 
 # Key to the recipe JSON file in S3
 RECIPE_JSON_KEY = 'menu/recipe-box.json'
+# RECIPE_JSON_KEY = 'menu/recipe-box-test.json'
 
 def get_recipes():
     fileString = file_storage.get_file(file_storage.FAMILY_WEB_SITE_BUCKET, RECIPE_JSON_KEY)
@@ -28,6 +29,11 @@ def get_recipes():
     return fileString
 
 # Adds or updates a single recipe record
+# Returns an object that looks like
+# {
+#    recipes: [ {}, {}. {} ],
+#    updateId: "111-22-333-444"
+# }
 def save_recipe(recipeRequest):
     print("save_recipe: " + recipeRequest)
 
@@ -58,6 +64,9 @@ def save_recipe(recipeRequest):
     allRecipesJson = json.dumps(allRecipes)
     file_storage.put_file(file_storage.FAMILY_WEB_SITE_BUCKET, RECIPE_JSON_KEY, allRecipesJson)
 
+    # add the ID of the updated recipe to the returned object
+    allRecipes["updateId"] = id
+    returnJson = json.dumps(allRecipes)
     # Log action and return
-    print(allRecipesJson)
-    return allRecipesJson
+    print(returnJson)
+    return returnJson
