@@ -20,7 +20,9 @@ def lambda_handler(event, context):
 
     path = event.get("path")
     httpMethod = event.get("httpMethod")
-    if path == "/picturesOfTheDay/data":
+    if httpMethod == "OPTIONS":
+        return respond(None, origin, "")
+    elif path == "/picturesOfTheDay/data":
         fileString = pictures_of_the_day.get_pictures_of_the_day_data()
         return respond(None, origin, fileString)
     elif path == "/videoOfTheDay/data":
