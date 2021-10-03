@@ -72,3 +72,40 @@ https://pythonexamples.org/python-json-to-list/
 looping through an array while also getting the index
 
 https://treyhunner.com/2016/04/how-to-loop-with-indexes-in-python/
+
+## File Upload
+
+Use pre-signed URL's to upload directly to S3
+
+[AWS Documentation for Pre-signed Upload URL](https://aws.amazon.com/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/)
+
+[Boto3 Example for creating Pre-Signed Upload URL](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-presigned-urls.html)
+
+[Boto3 Function Documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.generate_presigned_url)
+
+[Trouble shooting security issues](https://aws.amazon.com/premiumsupport/knowledge-center/s3-troubleshoot-403/)
+
+Made a new bucket called family-web-site-recipe-images that did nto block public access.
+
+Started getting a timeout error message.  According to AWS its because the Content-Length is not correct. although Postman should be setting that.  https://aws.amazon.com/premiumsupport/knowledge-center/s3-socket-connection-timeout-error/
+
+Stopped Postman from sending Content-Length and it got farther
+
+Got this error
+
+The authorization mechanism you have provided is not supported. Please use AWS4-HMAC-SHA256.
+
+Added this code as suggested [here](https://stackoverflow.com/questions/27400105/using-boto-for-aws-s3-buckets-for-signature-v4)
+
+```python
+s3_client = boto3.client('s3', region_name='us-east-2')
+```
+
+Then got a "SignatureDoesNotMatch" error
+
+Also specified the region URL as talked about [here](https://github.com/boto/boto3/issues/1149)
+
+```python
+s3_client = boto3.client('s3', region_name='us-east-2',  endpoint_url='https://s3.us-east-2.amazonaws.com', config=botocore.client.Config(signature_version='s3v4'))
+```
+Then had to put "back" the Content-Length header that I talked about removing above.
