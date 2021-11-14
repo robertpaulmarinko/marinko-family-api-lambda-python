@@ -70,3 +70,20 @@ def save_recipe(recipeRequest):
     # Log action and return
     print(returnJson)
     return returnJson
+
+class UploadUrlResponse:
+    fileKey = ""
+    url = ""
+
+# Generated a pre-signed upload URL.  Returns the url and the
+# file_key used when saving the file to S3.
+def get_upload_url():
+    file_key = uuid.uuid4().hex + '.jpg'
+    expiration=600
+
+    url = file_storage.create_presigned_upload_url(file_storage.FAMILY_WEB_SITE_RECIPE_IMAGES, file_key, expiration, 'image/jpeg' )
+
+    response = UploadUrlResponse()
+    response.fileKey = file_key
+    response.url = url
+    return json.dumps(response.__dict__)
