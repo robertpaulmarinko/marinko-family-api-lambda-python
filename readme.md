@@ -109,3 +109,50 @@ Also specified the region URL as talked about [here](https://github.com/boto/bot
 s3_client = boto3.client('s3', region_name='us-east-2',  endpoint_url='https://s3.us-east-2.amazonaws.com', config=botocore.client.Config(signature_version='s3v4'))
 ```
 Then had to put "back" the Content-Length header that I talked about removing above.
+
+Tried uploading from the website and got CORS errors
+
+Went under the S# bucket in the console, under "Permissions" then "CORS".  Added this JSON
+
+```JSON
+[
+    {
+        "AllowedHeaders": [
+            "*"
+        ],
+        "AllowedMethods": [
+            "PUT",
+            "POST"
+        ],
+        "AllowedOrigins": [
+            "http://localhost:8080",
+            "https://beta.marinkofamily.com",
+            "https://www.marinkofamily.com"
+        ],
+        "ExposeHeaders": []
+    }
+]
+```
+[AWS S3 CORS Documentation](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ManageCorsUsing.html)
+
+When generating the S3 signed URL from a Lambda, was getting "AccessDenied" error when PUTing to the URL.  Had to give the Lambda rights to "PUT" objects into the picture bucket.  Then it worked in PostMan
+
+But then using from the website was getting an "SignatureDoesNotMatch" does not match error.
+
+Problem what that the "Content-Type" header was wrong, it needed to be "image/jpeg"
+
+That uploaded the file, but when I tried to open the file, it said it was invalid.  File uploaded from PostMan was OK.
+
+Problem was using "Form" object to upload the file, instead should use FileReader to get binary contents of the file, like this
+
+```js
+        this._inputElement.addEventListener('change', () => {
+            const fr = new FileReader();
+            fr.readAsArrayBuffer(this._inputElement.files[0]);
+            fr.onload = function () {
+                this._uploadedFile = fr.result;
+                this.shadowRoot.querySelector('file-name').innerHTML = this._inputElement.files[0].name;
+            }
+        });
+```
+
