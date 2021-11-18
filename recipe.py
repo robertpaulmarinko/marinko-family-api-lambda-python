@@ -87,3 +87,16 @@ def get_upload_url():
     response.fileKey = file_key
     response.url = url
     return json.dumps(response.__dict__)
+
+class DownloadUrlResponse:
+    url = ""
+
+# Generated a pre-signed download URL.
+def get_download_url(file_key):
+    expiration=600
+
+    url = file_storage.create_presigned_download_url(file_storage.FAMILY_WEB_SITE_RECIPE_IMAGES, file_key, expiration )
+
+    response = DownloadUrlResponse()
+    response.url = url
+    return json.dumps(response.__dict__)    

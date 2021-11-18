@@ -37,6 +37,9 @@ def lambda_handler(event, context):
     elif path == "/recipe/uploadurl" and httpMethod == "GET":
         fileString = recipe.get_upload_url()
         return respond(None, origin, fileString)
+    elif path.startswith("/recipe/downloadurl/") and httpMethod == "GET":
+        fileString = recipe.get_download_url(path.split('/')[3])
+        return respond(None, origin, fileString)
     elif path == "/login":
         fileString = auth.attempt_login(event.get("body"))
         return respond(None, origin, fileString)

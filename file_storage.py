@@ -37,3 +37,14 @@ def create_presigned_upload_url(bucket, file_key, expiration, content_type ):
                                                         'ContentType':content_type},
                                                 ExpiresIn=expiration)                                                 
     return url
+
+# Generate a presigned URL S3 GET request URL
+def create_presigned_download_url(bucket, file_key, expiration ):
+    # Note that setting the region, endpoint and signature_version are all required to construct
+    # a URL that will work.  See readme.md file for more information.
+    s3_client = boto3.client('s3', region_name='us-east-2',  endpoint_url='https://s3.us-east-2.amazonaws.com', config=botocore.client.Config(signature_version='s3v4'))
+    url = s3_client.generate_presigned_url('get_object',
+                                                Params={'Bucket': bucket,
+                                                        'Key': file_key},
+                                                ExpiresIn=expiration)                                                 
+    return url    
